@@ -19,7 +19,6 @@ class Program
         Console.Write("Результат: ");
         Console.WriteLine(string.Join(" ",(PriorityAndCalculator(operations, numbers))));
     }
-
     
     static (List<string>, List<double>) ListsNumAndOper(string expression)
     {
@@ -54,7 +53,7 @@ class Program
 
         return (operations, numbers);
     }
-
+    
     static List<double> PriorityAndCalculator(List<string> operations, List<double> numbers)
     {
         int currentPriority = 1;
@@ -92,6 +91,7 @@ class Program
         }
         return (numbers);
     }
+    
     static double Calculator(double num1, double num2, string oper)
     {
         switch (oper)
@@ -105,8 +105,9 @@ class Program
         return 0;
     }
 }
+
 struct PriorityOfOperations
 {
     public string Operation;
     public int Priority;
-};
+}
