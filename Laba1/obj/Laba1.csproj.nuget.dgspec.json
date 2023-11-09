@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jasperin\\Desktop\\вуз\\ghjuf\\Laba1\\Laba1\\Laba1.csproj": {}
+    "C:\\Users\\jasperin\\Desktop\\вуз\\прога\\Laba1\\Laba1\\Laba1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jasperin\\Desktop\\вуз\\ghjuf\\Laba1\\Laba1\\Laba1.csproj": {
+    "C:\\Users\\jasperin\\Desktop\\вуз\\прога\\Laba1\\Laba1\\Laba1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jasperin\\Desktop\\вуз\\ghjuf\\Laba1\\Laba1\\Laba1.csproj",
+        "projectUniqueName": "C:\\Users\\jasperin\\Desktop\\вуз\\прога\\Laba1\\Laba1\\Laba1.csproj",
         "projectName": "Laba1",
-        "projectPath": "C:\\Users\\jasperin\\Desktop\\вуз\\ghjuf\\Laba1\\Laba1\\Laba1.csproj",
+        "projectPath": "C:\\Users\\jasperin\\Desktop\\вуз\\прога\\Laba1\\Laba1\\Laba1.csproj",
         "packagesPath": "C:\\Users\\jasperin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jasperin\\Desktop\\вуз\\ghjuf\\Laba1\\Laba1\\obj\\",
+        "outputPath": "C:\\Users\\jasperin\\Desktop\\вуз\\прога\\Laba1\\Laba1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jasperin\\AppData\\Roaming\\NuGet\\NuGet.Config"
