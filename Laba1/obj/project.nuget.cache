@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "UBOsPhVSIJrbCicAO9cRFT1D47Fh7XqjHinwTLkBqQTD9CoUBki9/lqrAW7HrHBCBTvpYLw4Cz1reLQmx+oGcg==",
+  "dgSpecHash": "AcpnJQVUPZJ2BgpbwYdNpiwnnwEms1kyWhQ51J21CbTfGT7dv4+blBbQTHyaMO73uD9Wx1e/hdrGePF+djLBZA==",
   "success": true,
   "projectFilePath": "C:\\Users\\jasperin\\Desktop\\вуз\\прога\\Laba1\\Laba1\\Laba1.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\jasperin\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.14\\microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\jasperin\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.14\\microsoft.windowsdesktop.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\jasperin\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.14\\microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\jasperin\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.14\\microsoft.netcore.app.host.win-x64.7.0.14.nupkg.sha512"
+  ],
   "logs": []
 }
