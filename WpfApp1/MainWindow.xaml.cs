@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using ExpressionCalculator;
 
@@ -17,8 +16,11 @@ namespace ExpressionCalculatorWPF
             try
             {
                 string expression = InputExpression.Text.Replace(",", ".");
+                double xValue = double.Parse(InputXValue.Text, CultureInfo.InvariantCulture);
+
                 var rpn = Utilities.ReversePolishNotation(expression);
-                double result = Utilities.CalculatingValue(rpn);
+                double result = Utilities.CalculatingValue(rpn, xValue);
+
                 ResultLabel.Content = "Результат: " + result.ToString(CultureInfo.InvariantCulture);
             }
             catch (Exception ex)

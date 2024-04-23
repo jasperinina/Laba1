@@ -1,10 +1,20 @@
 ﻿<Window x:Class="ExpressionCalculatorWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Калькулятор ОПЗ" Height="200" Width="400">
+        Title="Калькулятор ОПЗ" Height="300" Width="400">
     <StackPanel Margin="10">
-        <TextBox x:Name="InputExpression" Width="360" Height="30" Margin="5"/>
+        <!-- Подпись и поле ввода для математического выражения -->
+        <Label Content="Введите математическое выражение:" Margin="5"/>
+        <TextBox x:Name="InputExpression" Width="360" Height="30" Margin="5" ToolTip="Введите выражение, используйте 'x' как переменную"/>
+
+        <!-- Подпись и поле ввода для значения переменной 'x' -->
+        <Label Content="Введите значение переменной x:" Margin="5"/>
+        <TextBox x:Name="InputXValue" Width="360" Height="30" Margin="5" ToolTip="Значение переменной x"/>
+
+        <!-- Кнопка для выполнения вычислений -->
         <Button Content="Вычислить" Width="360" Height="30" Margin="5" Click="Calculate_Click"/>
-        <Label x:Name="ResultLabel" Width="360" Height="30" Margin="5" Content="Результат"/>
+
+        <!-- Метка для вывода результата -->
+        <Label x:Name="ResultLabel" Width="360" Height="30" Margin="5" Content="Результат будет отображён здесь"/>
     </StackPanel>
 </Window>
