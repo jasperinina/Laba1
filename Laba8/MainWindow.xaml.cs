@@ -67,7 +67,7 @@ namespace ExpressionCalculatorWPF
             double centerX = canvasWidth / 2;
             double centerY = canvasHeight / 2;
 
-            for (double x = start; x <= end; x += step / 10) // Увеличиваем разрешение графика
+            for (double x = start; x <= end; x += step / 10) 
             {
                 double? y = Utilities.CalculatingValue(tokens, x);
                 if (y.HasValue)
@@ -115,12 +115,22 @@ namespace ExpressionCalculatorWPF
                 StrokeThickness = 1
             };
 
+            Polyline horizontalArrow = new Polyline
+            {
+                Stroke = Brushes.Black,
+                Points = new PointCollection { new Point(canvasWidth - 10, centerY - 5), new Point(canvasWidth, centerY), new Point(canvasWidth - 10, centerY + 5) }
+            };
+            
+            Polyline verticalArrow = new Polyline
+            {
+                Stroke = Brushes.Black,
+                Points = new PointCollection { new Point(centerX - 5, 10), new Point(centerX, 0), new Point(centerX + 5, 10) }
+            };
+
             GraphCanvas.Children.Add(horizontalLine);
             GraphCanvas.Children.Add(verticalLine);
-
-            // Добавление стрелок поверх линий осей
-            AddArrow(horizontalLine, Direction.Right);
-            AddArrow(verticalLine, Direction.Up);
+            GraphCanvas.Children.Add(horizontalArrow);
+            GraphCanvas.Children.Add(verticalArrow);
 
             AddAxisLabel("x", canvasWidth - 20, centerY - 20);
             AddAxisLabel("y", centerX + 10, 10);
@@ -168,83 +178,6 @@ namespace ExpressionCalculatorWPF
             }
         }
 
-
-        private void AddArrow(Line axis, Direction direction)
-        {
-            double arrowSize = 10;
-
-            double x1 = axis.X2, y1 = axis.Y2;
-            double x2 = x1, y2 = y1;
-
-            if (direction == Direction.Right)
-            {
-                // Стрелка вправо (по оси x)
-                x2 = x1 - arrowSize;
-                y2 = y1 + arrowSize / 2;
-
-                Line arrow1 = new Line
-                {
-                    X1 = x1,
-                    Y1 = y1,
-                    X2 = x2,
-                    Y2 = y2,
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 1
-                };
-
-                x2 = x1 - arrowSize;
-                y2 = y1 - arrowSize / 2;
-
-                Line arrow2 = new Line
-                {
-                    X1 = x1,
-                    Y1 = y1,
-                    X2 = x2,
-                    Y2 = y2,
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 1
-                };
-
-                GraphCanvas.Children.Add(arrow1);
-                GraphCanvas.Children.Add(arrow2);
-            }
-            else if (direction == Direction.Up) // Изменено для стрелки по оси y
-            {
-                // Стрелка вверх (по оси y)
-                x2 = x1 - arrowSize / 2;
-                y2 = y1 - arrowSize;
-
-                Line arrow1 = new Line
-                {
-                    X1 = x1,
-                    Y1 = y1,
-                    X2 = x2,
-                    Y2 = y2,
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 1
-                };
-
-                x2 = x1 + arrowSize / 2; // изменено здесь
-                y2 = y1 - arrowSize; // изменено здесь
-
-                Line arrow2 = new Line
-                {
-                    X1 = x1,
-                    Y1 = y1,
-                    X2 = x2,
-                    Y2 = y2,
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 1
-                };
-
-                GraphCanvas.Children.Add(arrow1);
-                GraphCanvas.Children.Add(arrow2);
-            }
-        }
-
-
-
-
         private void AddAxisLabel(string text, double x, double y)
         {
             TextBlock label = new TextBlock
@@ -263,14 +196,6 @@ namespace ExpressionCalculatorWPF
         private void ShowError(string message)
         {
             MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        public enum Direction
-        {
-            Up,
-            Down,
-            Left,
-            Right
         }
     }
 }
