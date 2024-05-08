@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace ExpressionCalculator
+namespace ExpressionCalculatorWPF
 {
-    public abstract class Token
-    {
-    }
+    public abstract class Token { }
 
     public class Number : Token
     {
@@ -21,9 +19,9 @@ namespace ExpressionCalculator
     public class Operation : Token
     {
         public char Symbol { get; private set; }
-        public int Priority 
-        { 
-            get 
+        public int Priority
+        {
+            get
             {
                 switch (Symbol)
                 {
@@ -34,7 +32,7 @@ namespace ExpressionCalculator
                     case '-':
                         return 1;
                     default:
-                        throw new ArgumentException($"Unsupported operator {Symbol}");
+                        throw new ArgumentException($"Неизвестный оператор {Symbol}");
                 }
             }
         }
@@ -94,7 +92,7 @@ namespace ExpressionCalculator
             Name = name;
         }
     }
-    
+
     public class Parenthesis : Token
     {
         public char Symbol { get; private set; }
@@ -154,9 +152,9 @@ namespace ExpressionCalculator
                 {
                     finalRPN.Add(oper.Pop());
                 }
-                oper.Pop(); // Pop the '('
+                oper.Pop();
             }
-            else // Handling +, -, * or /
+            else
             {
                 Operation currentOp = new Operation(symbol);
                 while (oper.Count != 0 && (oper.Peek() >= currentOp))
@@ -167,7 +165,7 @@ namespace ExpressionCalculator
             }
         }
 
-        public static double CalculatingValue(List<Token> finalRPN, double xValue)
+        public static double? CalculatingValue(List<Token> finalRPN, double xValue)
         {
             Stack<double> values = new Stack<double>();
 
@@ -198,5 +196,4 @@ namespace ExpressionCalculator
             return values.Pop();
         }
     }
-
 }

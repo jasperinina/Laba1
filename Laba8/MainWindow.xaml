@@ -1,0 +1,48 @@
+﻿<Window x:Class="ExpressionCalculatorWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Калькулятор ОПЗ" Height="500" Width="1000">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Ввод математического выражения -->
+        <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Введите математическое выражение:" Grid.Column="0" VerticalAlignment="Center" FontFamily="Constantia" FontSize="14"/>
+            <TextBox x:Name="InputExpression" Grid.Column="1" Width="360" Height="30" Margin="5" ToolTip="Введите выражение, используйте 'x' как переменную"/>
+        </Grid>
+
+        <!-- График с рамкой -->
+        <Border Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="Black" BorderThickness="1">
+            <Canvas x:Name="GraphCanvas" Background="White" ClipToBounds="True"/>
+        </Border>
+
+        <!-- Настройки диапазона графика и масштаб -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+            <Label Content="Начало" FontFamily="Constantia" FontSize="14"/>
+            <TextBox x:Name="InputStart" Width="60" Margin="0,5,0,5" ToolTip="Начало диапазона"/>
+
+            <Label Content="Конец" Margin="0,10,0,0" FontFamily="Constantia" FontSize="14"/>
+            <TextBox x:Name="InputEnd" Width="60" Margin="0,5,0,5" ToolTip="Конец диапазона"/>
+
+            <Label Content="Шаг" Margin="0,10,0,0" FontFamily="Constantia" FontSize="14"/>
+            <TextBox x:Name="InputStep" Width="60" Margin="0,5,0,5" ToolTip="Шаг вычислений"/>
+
+            <Label Content="Масштаб" Margin="0,10,0,0" FontFamily="Constantia" FontSize="14"/>
+            <TextBox x:Name="InputScale" Width="60" Margin="0,5,0,5" ToolTip="Масштаб графика"/>
+
+            <Button Content="Построить график" Margin="0,10,0,0" Click="UpdateGraph_Click" FontFamily="Constantia" FontSize="14"/>
+        </StackPanel>
+    </Grid>
+</Window>

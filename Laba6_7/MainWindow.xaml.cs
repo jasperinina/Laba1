@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Windows;
-using ExpressionCalculator;
 
 namespace ExpressionCalculatorWPF
 {

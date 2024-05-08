@@ -10,9 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laba4 RPN", "Laba4 RPN\Laba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laba5", "Laba5\Laba5.csproj", "{6BE2E39B-0783-4BDB-9F47-DFF3FF3A0380}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{F90226F6-4A5C-495B-92A3-DC744FB0904A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laba6_7", "Laba6_7\Laba6_7.csproj", "{F90226F6-4A5C-495B-92A3-DC744FB0904A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "logika", "logika\logika.csproj", "{E30CE840-A552-4F5C-AE12-94697ABFC304}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laba8", "Laba8\Laba8.csproj", "{111DB6A5-7B6A-44BB-AE52-E5E3B86ED7EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +50,9 @@ Global
 		{E30CE840-A552-4F5C-AE12-94697ABFC304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E30CE840-A552-4F5C-AE12-94697ABFC304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E30CE840-A552-4F5C-AE12-94697ABFC304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{111DB6A5-7B6A-44BB-AE52-E5E3B86ED7EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{111DB6A5-7B6A-44BB-AE52-E5E3B86ED7EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{111DB6A5-7B6A-44BB-AE52-E5E3B86ED7EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{111DB6A5-7B6A-44BB-AE52-E5E3B86ED7EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
