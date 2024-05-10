@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows;
 
 namespace ExpressionCalculatorWPF
@@ -14,17 +15,36 @@ namespace ExpressionCalculatorWPF
         {
             try
             {
+                ErrorMessage.Text = string.Empty;
+
                 string expression = InputExpression.Text.Replace(",", ".");
-                double xValue = double.Parse(InputXValue.Text, CultureInfo.InvariantCulture);
+                double xValue = 0;
+                bool isXValid = double.TryParse(InputXValue.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out xValue);
 
                 var rpn = Utilities.ReversePolishNotation(expression);
-                double result = Utilities.CalculatingValue(rpn, xValue);
+                double? result;
 
-                ResultLabel.Content = "Результат: " + result.ToString(CultureInfo.InvariantCulture);
+                if (isXValid)
+                {
+                    result = Utilities.CalculatingValue(rpn, xValue);
+                }
+                else
+                {
+                    result = Utilities.CalculatingValue(rpn, 0); // Используем значение по умолчанию, если переменная x не используется
+                }
+
+                if (result.HasValue)
+                {
+                    OutputResult.Text = result.Value.ToString(CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    OutputResult.Text = "Результат не может быть вычислен.";
+                }
             }
             catch (Exception ex)
             {
-                ResultLabel.Content = "Ошибка: " + ex.Message;
+                ErrorMessage.Text = "Ошибка: " + ex.Message;
             }
         }
     }
