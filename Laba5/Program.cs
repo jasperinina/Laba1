@@ -5,6 +5,9 @@ class Program
 {
     static void Main()
     {
+        Console.Write("Введите математическое выражение с переменной x: ");
+        string expression = Console.ReadLine().Replace(",", ".");
+        
         Console.Write("Введите значение переменной x: ");
         string inputValue = Console.ReadLine().Replace(",", ".");
         double xValue;
@@ -13,9 +16,6 @@ class Program
             Console.Write("Некорректный ввод, введите еще раз: ");
             inputValue = Console.ReadLine().Replace(",", ".");
         }
-
-        Console.Write("Введите математическое выражение с переменной x: ");
-        string expression = Console.ReadLine().Replace(",", ".");
 
         Console.Write("ОПЗ: ");
         var rpn = Utilities.ReversePolishNotation(expression);
@@ -27,7 +27,7 @@ class Program
             }
             else if (token is Operation operation)
             {
-                Console.Write($"{operation.Symbol} ");
+                Console.Write($"{operation} "); // Вместо operation.Symbol исправлено на operation
             }
             else if (token is Variable variable)
             {

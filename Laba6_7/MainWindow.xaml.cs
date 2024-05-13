@@ -44,7 +44,7 @@ namespace ExpressionCalculatorWPF
             }
             catch (Exception ex)
             {
-                ErrorMessage.Text = "Ошибка: " + ex.Message;
+                ErrorMessage.Text = ex.Message;
             }
         }
     }
