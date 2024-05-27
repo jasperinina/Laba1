@@ -27,7 +27,7 @@ class Program
             }
             else if (token is Operation operation)
             {
-                Console.Write($"{operation} "); // Вместо operation.Symbol исправлено на operation
+                Console.Write($"{operation} "); 
             }
             else if (token is Variable variable)
             {

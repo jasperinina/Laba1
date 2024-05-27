@@ -30,7 +30,7 @@ namespace ExpressionCalculatorWPF
                 }
                 else
                 {
-                    result = Utilities.CalculatingValue(rpn, 0); // Используем значение по умолчанию, если переменная x не используется
+                    result = Utilities.CalculatingValue(rpn, 0);
                 }
 
                 if (result.HasValue)

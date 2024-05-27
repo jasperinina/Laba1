@@ -50,7 +50,6 @@ namespace ExpressionCalculatorWPF
 
     public static class Utilities
     {
-        //Преобразования математического выражения в обратную польскую запись
         public static List<Token> ReversePolishNotation(string expression)
         {
             List<Token> finalRPN = new List<Token>();
@@ -74,13 +73,13 @@ namespace ExpressionCalculatorWPF
                     finalRPN.Add(new Number(double.Parse(currentNum.ToString(), CultureInfo.InvariantCulture)));
                     i--;
                 }
-                else if (char.IsLetter(ch)) // Обработка переменных и функций
+                else if (char.IsLetter(ch)) 
                 {
-                    if (ch == 'x') // Если символ - переменная 'x'
+                    if (ch == 'x') 
                     {
                         finalRPN.Add(new Variable('x'));
                     }
-                    else // Если символ - функция
+                    else 
                     {
                         if (TryGetOperator(expression, i, out string opSymbol, out int opLength))
                         {
@@ -99,7 +98,7 @@ namespace ExpressionCalculatorWPF
                     {
                         finalRPN.Add(oper.Pop());
                     }
-                    if (oper.Count == 0) throw new InvalidOperationException("Несовпадающие круглые скобки");
+                    if (oper.Count == 0) throw new InvalidOperationException("Несовпадающие круглые скобки.");
                     oper.Pop();
 
                     if (oper.Count > 0 && IsFunction(oper.Peek().Symbol))
@@ -107,7 +106,7 @@ namespace ExpressionCalculatorWPF
                         finalRPN.Add(oper.Pop());
                     }
                 }
-                else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') // Обработка операторов +, -, *, /
+                else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') 
                 {
                     ProcessOperator(ch.ToString(), oper, finalRPN);
                 }
@@ -118,13 +117,13 @@ namespace ExpressionCalculatorWPF
                 }
                 else if (!char.IsWhiteSpace(ch))
                 {
-                    throw new InvalidOperationException($"Неизвестный оператор или символ: {ch}");
+                    throw new InvalidOperationException($"Неизвестный оператор или символ: {ch}.");
                 }
             }
 
             while (oper.Count > 0)
             {
-                if (oper.Peek().Symbol == "(") throw new InvalidOperationException("Несовпадающие круглые скобки");
+                if (oper.Peek().Symbol == "(") throw new InvalidOperationException("Несовпадающие круглые скобки.");
                 finalRPN.Add(oper.Pop());
             }
 
@@ -134,8 +133,7 @@ namespace ExpressionCalculatorWPF
         private static void ProcessOperator(string symbol, Stack<Operation> oper, List<Token> finalRPN)
         {
             Operation newOp;
-    
-            // Если символ - функция, то добавляем ее в стек операций
+            
             if (IsFunction(symbol))
             {
                 newOp = new Operation(symbol);
@@ -169,7 +167,7 @@ namespace ExpressionCalculatorWPF
             {
                 return !currentOp.IsRightAssociative;
             }
-            if (currentOp.Priority == 4) // Проверяем для функций и их аргументов
+            if (currentOp.Priority == 4) 
             {
                 return false;
             }
@@ -178,7 +176,6 @@ namespace ExpressionCalculatorWPF
 
         private static bool IsFunction(string symbol)
         {
-            // Assuming functions are defined as earlier
             return new HashSet<string> {"log", "sqrt", "sin", "cos", "tg", "ctg", "rt"}.Contains(symbol);
         }
         
@@ -188,13 +185,13 @@ namespace ExpressionCalculatorWPF
             opSymbol = null;
             opLength = 0;
 
-            // Проверяем, является ли символ буквой, что может указывать на функцию
+            
             if (char.IsLetter(expression[index]))
             {
                 StringBuilder functionName = new StringBuilder();
                 functionName.Append(expression[index]);
                 index++;
-                // Собираем название функции
+                
                 while (index < expression.Length && char.IsLetter(expression[index]))
                 {
                     functionName.Append(expression[index]);
@@ -204,8 +201,7 @@ namespace ExpressionCalculatorWPF
                 opLength = opSymbol.Length;
                 return true;
             }
-
-            // Проверяем наличие оператора в списке операторов
+            
             foreach (string op in allOperators)
             {
                 if (expression.Substring(index).StartsWith(op))
@@ -237,7 +233,7 @@ namespace ExpressionCalculatorWPF
                 {
                     if (!ProcessOperation(op, values))
                     {
-                        throw new InvalidOperationException($"Не удалось обработать операцию: {op.Symbol}");
+                        throw new InvalidOperationException($"Не удалось обработать операцию: {op.Symbol}.");
                     }
                 }
             }
@@ -252,7 +248,7 @@ namespace ExpressionCalculatorWPF
             {
                 "+" or "-" or "*" or "/" or "^" or "rt" => 2,
                 "log" or "sqrt" or "sin" or "cos" or "tg" or "ctg" => op.Symbol == "log" ? 2 : 1,
-                _ => throw new InvalidOperationException($"Неизвестная операция {op.Symbol}")
+                _ => throw new InvalidOperationException($"Неизвестная операция {op.Symbol}.")
             };
 
             if (values.Count < argsNeeded)
