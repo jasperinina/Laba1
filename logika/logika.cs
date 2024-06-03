@@ -59,26 +59,32 @@ namespace ExpressionCalculatorWPF
             for (int i = 0; i < expression.Length; i++)
             {
                 char ch = expression[i];
+                
                 if (char.IsDigit(ch) || ch == '.')
                 {
                     currentNum.Clear();
+                    
                     do
                     {
                         currentNum.Append(ch);
                         i++;
-                        if (i < expression.Length) ch = expression[i];
+                        
+                        if (i < expression.Length)
+                        {
+                            ch = expression[i];
+                        }
                     }
                     while (i < expression.Length && (char.IsDigit(ch) || ch == '.'));
                     finalRPN.Add(new Number(double.Parse(currentNum.ToString(), CultureInfo.InvariantCulture)));
                     i--;
                 }
-                else if (char.IsLetter(ch)) 
+                else if (char.IsLetter(ch))
                 {
-                    if (ch == 'x') 
+                    if (ch == 'x')
                     {
                         finalRPN.Add(new Variable('x'));
                     }
-                    else 
+                    else
                     {
                         if (TryGetOperator(expression, i, out string opSymbol, out int opLength))
                         {
@@ -97,8 +103,12 @@ namespace ExpressionCalculatorWPF
                     {
                         finalRPN.Add(oper.Pop());
                     }
+
+                    if (oper.Count == 0)
+                    {
+                        throw new InvalidOperationException("Несовпадающие круглые скобки.");
+                    }
                     
-                    if (oper.Count == 0) throw new InvalidOperationException("Несовпадающие круглые скобки.");
                     oper.Pop();
 
                     if (oper.Count > 0 && IsFunction(oper.Peek().Symbol))
@@ -106,7 +116,14 @@ namespace ExpressionCalculatorWPF
                         finalRPN.Add(oper.Pop());
                     }
                 }
-                else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') 
+                else if (ch == ',')
+                {
+                    while (oper.Count > 0 && oper.Peek().Symbol != "(")
+                    {
+                        finalRPN.Add(oper.Pop());
+                    }
+                }
+                else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
                 {
                     ProcessOperator(ch.ToString(), oper, finalRPN);
                 }
@@ -123,13 +140,16 @@ namespace ExpressionCalculatorWPF
 
             while (oper.Count > 0)
             {
-                if (oper.Peek().Symbol == "(") throw new InvalidOperationException("Несовпадающие круглые скобки.");
+                if (oper.Peek().Symbol == "(")
+                {
+                    throw new InvalidOperationException("Несовпадающие круглые скобки.");
+                }
                 finalRPN.Add(oper.Pop());
             }
 
             return finalRPN;
         }
-
+        
         private static void ProcessOperator(string symbol, Stack<Operation> oper, List<Token> finalRPN)
         {
             Operation newOp;
@@ -169,7 +189,7 @@ namespace ExpressionCalculatorWPF
             
             return topOfStack.Priority > currentOp.Priority;
         }
-
+        
         private static bool IsFunction(string symbol)
         {
             return new HashSet<string> {"log", "sqrt", "sin", "cos", "tg", "ctg", "rt"}.Contains(symbol);
@@ -208,7 +228,6 @@ namespace ExpressionCalculatorWPF
                     return true;
                 }
             }
-            
             return false;
         }
         
@@ -235,17 +254,16 @@ namespace ExpressionCalculatorWPF
                 }
             }
 
-            return values.Count > 0 ? values.Pop() : null;
+            return values.Count > 0 ? values.Pop() : (double?)null;
         }
         
         private static bool ProcessOperation(Operation op, Stack<double> values)
         {
             double num2, num1;
-            
             int argsNeeded = op.Symbol switch
             {
-                "+" or "-" or "*" or "/" or "^" or "rt" or "log"=> 2,
-                "sqrt" or "sin" or "cos" or "tg" or "ctg" => 1,
+                "+" or "-" or "*" or "/" or "^" or "rt" or "log" => 2,
+                 "sqrt" or "sin" or "cos" or "tg" or "ctg" => 1,
                 _ => throw new InvalidOperationException($"Неизвестная операция {op.Symbol}.")
             };
 
@@ -254,30 +272,67 @@ namespace ExpressionCalculatorWPF
             num2 = argsNeeded > 1 ? values.Pop() : 0;
             num1 = values.Pop();
             
-            switch (op.Symbol)
+            try
             {
-                case "+": values.Push(num1 + num2); break;
-                case "-": values.Push(num1 - num2); break;
-                case "*": values.Push(num1 * num2); break;
-                case "/": values.Push(num1 / num2); break;
-                case "^": values.Push(Math.Pow(num1, num2)); break;
-                case "rt": values.Push(Math.Pow(num1, 1.0 / num2)); break;
-                case "log":
-                    if (num1 <= 0 || num2 <= 0 || num2 == 1) return false;
-                    values.Push(Math.Log(num2, num1));
-                    break;
-                case "sqrt":
-                    if (num1 < 0) return false;
-                    values.Push(Math.Sqrt(num1));
-                    break;
-                case "sin": values.Push(Math.Sin(num1)); break;
-                case "cos": values.Push(Math.Cos(num1)); break;
-                case "tg": values.Push(Math.Tan(num1)); break;
-                case "ctg": values.Push(1.0 / Math.Tan(num1)); break;
-                default: return false;
+                switch (op.Symbol)
+                {
+                    case "+":
+                        values.Push(num1 + num2);
+                        break;
+                    case "-":
+                        values.Push(num1 - num2);
+                        break;
+                    case "*":
+                        values.Push(num1 * num2);
+                        break;
+                    case "/":
+                        if (num2 == 0)
+                            throw new InvalidOperationException("Деление на ноль.");
+                        values.Push(num1 / num2);
+                        break;
+                    case "^":
+                        values.Push(Math.Pow(num1, num2));
+                        break;
+                    case "rt":
+                        if (num2 == 0)
+                            throw new InvalidOperationException("Невозможно вычислить корень нулевой степени.");
+                        values.Push(Math.Pow(num1, 1.0 / num2));
+                        break;
+                    case "log":
+                        if (num1 <= 0 || num2 <= 0 || num2 == 1)
+                            throw new InvalidOperationException("Некорректные значения для логарифма.");
+                        values.Push(Math.Log(num2, num1));
+                        break;
+                    case "sqrt":
+                        if (num1 < 0)
+                            throw new InvalidOperationException("Невозможно вычислить квадратный корень из отрицательного числа.");
+                        values.Push(Math.Sqrt(num1));
+                        break;
+                    case "sin":
+                        values.Push(Math.Sin(num1));
+                        break;
+                    case "cos":
+                        values.Push(Math.Cos(num1));
+                        break;
+                    case "tg":
+                        values.Push(Math.Tan(num1));
+                        break;
+                    case "ctg":
+                        if (Math.Tan(num1) == 0)
+                            throw new InvalidOperationException("Невозможно вычислить котангенс для данного угла.");
+                        values.Push(1.0 / Math.Tan(num1));
+                        break;
+                    default:
+                        return false;
+                }
             }
-            
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
             return true;
         }
-    }   
+    }
 }

@@ -69,7 +69,16 @@ namespace ExpressionCalculatorWPF
 
             for (double x = start; x <= end; x += step / 10) 
             {
-                double? y = Utilities.CalculatingValue(tokens, x);
+                double? y = null;
+                try
+                {
+                    y = Utilities.CalculatingValue(tokens, x);
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
+        
                 if (y.HasValue)
                 {
                     double canvasX = scale * x + centerX;
