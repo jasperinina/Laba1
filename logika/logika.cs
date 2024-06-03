@@ -55,8 +55,7 @@ namespace ExpressionCalculatorWPF
             List<Token> finalRPN = new List<Token>();
             Stack<Operation> oper = new Stack<Operation>();
             StringBuilder currentNum = new StringBuilder();
-
-
+            
             for (int i = 0; i < expression.Length; i++)
             {
                 char ch = expression[i];
@@ -98,6 +97,7 @@ namespace ExpressionCalculatorWPF
                     {
                         finalRPN.Add(oper.Pop());
                     }
+                    
                     if (oper.Count == 0) throw new InvalidOperationException("Несовпадающие круглые скобки.");
                     oper.Pop();
 
@@ -142,10 +142,12 @@ namespace ExpressionCalculatorWPF
             else
             {
                 newOp = new Operation(symbol);
+                
                 while (oper.Count > 0 && ShouldPop(oper.Peek(), newOp))
                 {
                     finalRPN.Add(oper.Pop());
                 }
+                
                 if (oper.Count == 0 || oper.Peek().Symbol == "(" || newOp.Priority > oper.Peek().Priority)
                 {
                     oper.Push(newOp);
@@ -158,19 +160,13 @@ namespace ExpressionCalculatorWPF
             }
         }
 
-
         private static bool ShouldPop(Operation topOfStack, Operation currentOp)
         {
             if (currentOp.Symbol == "(") return false;
             if (topOfStack.Symbol == "(") return false;
-            if (currentOp.Priority == topOfStack.Priority)
-            {
-                return !currentOp.IsRightAssociative;
-            }
-            if (currentOp.Priority == 4) 
-            {
-                return false;
-            }
+            if (currentOp.Priority == topOfStack.Priority) return !currentOp.IsRightAssociative;
+            if (currentOp.Priority == 4) return false;
+            
             return topOfStack.Priority > currentOp.Priority;
         }
 
@@ -184,7 +180,6 @@ namespace ExpressionCalculatorWPF
             string[] allOperators = { "+", "-", "*", "/", "^", "log", "sqrt", "sin", "cos", "tg", "ctg", "rt" };
             opSymbol = null;
             opLength = 0;
-
             
             if (char.IsLetter(expression[index]))
             {
@@ -197,8 +192,10 @@ namespace ExpressionCalculatorWPF
                     functionName.Append(expression[index]);
                     index++;
                 }
+                
                 opSymbol = functionName.ToString();
                 opLength = opSymbol.Length;
+                
                 return true;
             }
             
@@ -211,9 +208,9 @@ namespace ExpressionCalculatorWPF
                     return true;
                 }
             }
+            
             return false;
         }
-
         
         public static double? CalculatingValue(List<Token> finalRPN, double xValue)
         {
@@ -238,26 +235,25 @@ namespace ExpressionCalculatorWPF
                 }
             }
 
-            return values.Count > 0 ? values.Pop() : (double?)null;
+            return values.Count > 0 ? values.Pop() : null;
         }
         
         private static bool ProcessOperation(Operation op, Stack<double> values)
         {
             double num2, num1;
+            
             int argsNeeded = op.Symbol switch
             {
-                "+" or "-" or "*" or "/" or "^" or "rt" => 2,
-                "log" or "sqrt" or "sin" or "cos" or "tg" or "ctg" => op.Symbol == "log" ? 2 : 1,
+                "+" or "-" or "*" or "/" or "^" or "rt" or "log"=> 2,
+                "sqrt" or "sin" or "cos" or "tg" or "ctg" => 1,
                 _ => throw new InvalidOperationException($"Неизвестная операция {op.Symbol}.")
             };
 
-            if (values.Count < argsNeeded)
-                return false;
+            if (values.Count < argsNeeded) return false;
 
             num2 = argsNeeded > 1 ? values.Pop() : 0;
             num1 = values.Pop();
-
-
+            
             switch (op.Symbol)
             {
                 case "+": values.Push(num1 + num2); break;
@@ -267,13 +263,11 @@ namespace ExpressionCalculatorWPF
                 case "^": values.Push(Math.Pow(num1, num2)); break;
                 case "rt": values.Push(Math.Pow(num1, 1.0 / num2)); break;
                 case "log":
-                    if (num1 <= 0 || num2 <= 0 || num2 == 1)
-                        return false;
+                    if (num1 <= 0 || num2 <= 0 || num2 == 1) return false;
                     values.Push(Math.Log(num2, num1));
                     break;
                 case "sqrt":
-                    if (num1 < 0)
-                        return false;
+                    if (num1 < 0) return false;
                     values.Push(Math.Sqrt(num1));
                     break;
                 case "sin": values.Push(Math.Sin(num1)); break;
@@ -282,7 +276,8 @@ namespace ExpressionCalculatorWPF
                 case "ctg": values.Push(1.0 / Math.Tan(num1)); break;
                 default: return false;
             }
+            
             return true;
         }
-    }
+    }   
 }
