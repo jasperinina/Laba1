@@ -6,11 +6,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
-        <RootNamespace>WpfApp1</RootNamespace>
+        <RootNamespace>Laba8</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Laba5\Laba5.csproj" />
+      <ProjectReference Include="..\Logic\Logic.csproj" />
     </ItemGroup>
 
 </Project>

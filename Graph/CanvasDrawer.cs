@@ -1,105 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Logic;
+using RPN.Logic;
 
 namespace ExpressionCalculatorWPF
 {
-    public partial class MainWindow : Window
+    public class CanvasDrawer
     {
-        public MainWindow()
+        private readonly Canvas _canvas;
+        private readonly Calculator _calculator;
+
+        public CanvasDrawer(Canvas canvas)
         {
-            InitializeComponent();
+            _canvas = canvas;
+            _calculator = new Calculator();
         }
 
-        private void UpdateGraph_Click(object sender, RoutedEventArgs e)
+        public void DrawGraph(string expression, double start, double end, double step, double scale)
         {
-            DrawGraph();
-        }
-
-        private void DrawGraph()
-        {
-            GraphCanvas.Children.Clear();
-
-            if (!double.TryParse(InputStart.Text, out double start))
-            {
-                ShowError("Некорректное значение начала диапазона.");
-                return;
-            }
-
-            if (!double.TryParse(InputEnd.Text, out double end))
-            {
-                ShowError("Некорректное значение конца диапазона.");
-                return;
-            }
-
-            if (!double.TryParse(InputStep.Text, out double step) || step <= 0)
-            {
-                ShowError("Некорректное значение шага вычислений.");
-                return;
-            }
-
-            if (!double.TryParse(InputScale.Text, out double scale) || scale <= 0)
-            {
-                ShowError("Некорректное значение масштаба.");
-                return;
-            }
-
-            string expression = InputExpression.Text;
-
+            _canvas.Children.Clear();
             DrawAxes(scale);
 
-            List<Token> tokens = Utilities.ReversePolishNotation(expression);
-
-            Polyline polyline = new Polyline
+            try
             {
-                Stroke = Brushes.Red,
-                StrokeThickness = 1,
-                ClipToBounds = true
-            };
+                List<Token> tokens = _calculator.Parse(expression);
+                List<Token> postfix = _calculator.ReversePolishNotation(tokens);
 
-            double canvasWidth = GraphCanvas.ActualWidth;
-            double canvasHeight = GraphCanvas.ActualHeight;
-
-            double centerX = canvasWidth / 2;
-            double centerY = canvasHeight / 2;
-
-            for (double x = start; x <= end; x += step / 10) 
-            {
-                double? y = null;
-                try
+                Polyline polyline = new Polyline
                 {
-                    y = Utilities.CalculatingValue(tokens, x);
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                }
-        
-                if (y.HasValue)
-                {
-                    double canvasX = scale * x + centerX;
-                    double canvasY = -scale * y.Value + centerY;
+                    Stroke = Brushes.Red,
+                    StrokeThickness = 1,
+                    ClipToBounds = true
+                };
 
-                    if (canvasX >= 0 && canvasX <= canvasWidth && canvasY >= 0 && canvasY <= canvasHeight)
+                double canvasWidth = _canvas.ActualWidth;
+                double canvasHeight = _canvas.ActualHeight;
+
+                double centerX = canvasWidth / 2;
+                double centerY = canvasHeight / 2;
+
+                for (double x = start; x <= end; x += step / 10)
+                {
+                    double? y = null;
+                    try
                     {
-                        polyline.Points.Add(new Point(canvasX, canvasY));
+                        var variableValues = new Dictionary<string, double> { { "x", x } };
+                        y = _calculator.EvaluatePostfix(postfix, variableValues);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    if (y.HasValue)
+                    {
+                        double canvasX = scale * x + centerX;
+                        double canvasY = -scale * y.Value + centerY;
+
+                        if (canvasX >= 0 && canvasX <= canvasWidth && canvasY >= 0 && canvasY <= canvasHeight)
+                        {
+                            polyline.Points.Add(new Point(canvasX, canvasY));
+                        }
                     }
                 }
-            }
 
-            GraphCanvas.Children.Add(polyline);
+                _canvas.Children.Add(polyline);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Ошибка при вычислении выражения: {ex.Message}");
+            }
         }
 
         private void DrawAxes(double scale)
         {
-            GraphCanvas.Children.Clear();
+            _canvas.Children.Clear();
 
-            double canvasWidth = GraphCanvas.ActualWidth;
-            double canvasHeight = GraphCanvas.ActualHeight;
+            double canvasWidth = _canvas.ActualWidth;
+            double canvasHeight = _canvas.ActualHeight;
 
             double centerX = canvasWidth / 2;
             double centerY = canvasHeight / 2;
@@ -129,20 +109,21 @@ namespace ExpressionCalculatorWPF
                 Stroke = Brushes.Black,
                 Points = new PointCollection { new Point(canvasWidth - 10, centerY - 5), new Point(canvasWidth, centerY), new Point(canvasWidth - 10, centerY + 5) }
             };
-            
+
             Polyline verticalArrow = new Polyline
             {
                 Stroke = Brushes.Black,
                 Points = new PointCollection { new Point(centerX - 5, 10), new Point(centerX, 0), new Point(centerX + 5, 10) }
             };
 
-            GraphCanvas.Children.Add(horizontalLine);
-            GraphCanvas.Children.Add(verticalLine);
-            GraphCanvas.Children.Add(horizontalArrow);
-            GraphCanvas.Children.Add(verticalArrow);
+            _canvas.Children.Add(horizontalLine);
+            _canvas.Children.Add(verticalLine);
+            _canvas.Children.Add(horizontalArrow);
+            _canvas.Children.Add(verticalArrow);
 
             AddAxisLabel("x", canvasWidth - 20, centerY - 20);
             AddAxisLabel("y", centerX + 10, 10);
+
 
             for (int i = (int)(-canvasWidth / (2 * scale)); i <= canvasWidth / (2 * scale); i++)
             {
@@ -157,7 +138,7 @@ namespace ExpressionCalculatorWPF
                     Stroke = Brushes.Black,
                     StrokeThickness = 1
                 };
-                GraphCanvas.Children.Add(tick);
+                _canvas.Children.Add(tick);
 
                 if (i != 0)
                 {
@@ -178,7 +159,7 @@ namespace ExpressionCalculatorWPF
                     Stroke = Brushes.Black,
                     StrokeThickness = 1
                 };
-                GraphCanvas.Children.Add(tick);
+                _canvas.Children.Add(tick);
 
                 if (i != 0)
                 {
@@ -199,7 +180,7 @@ namespace ExpressionCalculatorWPF
             Canvas.SetLeft(label, x);
             Canvas.SetTop(label, y);
 
-            GraphCanvas.Children.Add(label);
+            _canvas.Children.Add(label);
         }
 
         private void ShowError(string message)

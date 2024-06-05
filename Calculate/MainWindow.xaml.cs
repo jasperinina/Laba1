@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using RPN.Logic;
 
 namespace ExpressionCalculatorWPF
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -21,16 +22,16 @@ namespace ExpressionCalculatorWPF
                 double xValue = 0;
                 bool isXValid = double.TryParse(InputXValue.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out xValue);
 
-                var rpn = Utilities.ReversePolishNotation(expression);
+                var rpn = Calculator.ReversePolishNotation(expression);
                 double? result;
 
                 if (isXValid)
                 {
-                    result = Utilities.CalculatingValue(rpn, xValue);
+                    result = Calculator.CalculatingValue(rpn, xValue);
                 }
                 else
                 {
-                    result = Utilities.CalculatingValue(rpn, 0);
+                    result = Calculator.CalculatingValue(rpn, 0);
                 }
 
                 if (result.HasValue)

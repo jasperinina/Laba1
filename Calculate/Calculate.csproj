@@ -6,10 +6,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <RootNamespace>WpfApp1</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\logika\logika.csproj" />
+      <ProjectReference Include="..\Console\Console.csproj" />
     </ItemGroup>
 
 </Project>
