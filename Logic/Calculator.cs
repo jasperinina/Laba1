@@ -159,7 +159,7 @@ namespace RPN.Logic
             return output;
         }
 
-        public double EvaluatePostfix(List<Token> postfixTokens, Dictionary<string, double> variableValues)
+        public double CalculatingAnExpression(List<Token> postfixTokens, Dictionary<string, double> variableValues)
         {
             var stack = new Stack<double>();
 

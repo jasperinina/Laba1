@@ -47,7 +47,7 @@ namespace ExpressionCalculatorWPF
                     try
                     {
                         var variableValues = new Dictionary<string, double> { { "x", x } };
-                        y = _calculator.EvaluatePostfix(postfix, variableValues);
+                        y = _calculator.CalculatingAnExpression(postfix, variableValues);
                     }
                     catch (Exception)
                     {

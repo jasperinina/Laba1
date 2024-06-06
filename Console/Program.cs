@@ -58,7 +58,7 @@ namespace test
 
             try
             {
-                double result = calculator.EvaluatePostfix(postfix, variableValues);
+                double result = calculator.CalculatingAnExpression(postfix, variableValues);
                 Console.WriteLine("\n\nРезультат вычисления: ");
                 Console.WriteLine(result);
             }
